@@ -1,6 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart, Truck, Package, Receipt, Tag } from "lucide-react";
+import {
+  ShoppingCart,
+  Truck,
+  Package,
+  Tag,
+  Phone,
+  ArrowRight,
+  ChevronRight,
+  Building2,
+} from "lucide-react";
 import { getCategories, getProducts } from "@/lib/woocommerce";
 import type { Category, Product } from "@/types/woocommerce";
 
@@ -10,126 +19,264 @@ function formatPrice(price: string): string {
   return `€${num.toFixed(2).replace(".", ",")}`;
 }
 
-function SectionLabel({ children }: { children: string }) {
+function AnnouncementBar() {
   return (
-    <p className="text-xs font-semibold text-[#6B7280] uppercase tracking-widest mb-8">
-      {children}
-    </p>
+    <div className="bg-[#16A34A]/[0.08] border-b border-[#16A34A]/[0.15]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-9 flex items-center justify-center gap-4 sm:gap-8">
+        <span className="text-[11px] text-[#4ADE80] tracking-wide">
+          Vandaag besteld, morgen verzonden
+        </span>
+        <span className="hidden sm:block text-[#16A34A]/30 select-none">·</span>
+        <span className="hidden sm:block text-[11px] text-[#4ADE80] tracking-wide">
+          Minimaal 100 stuks
+        </span>
+        <span className="hidden md:block text-[#16A34A]/30 select-none">·</span>
+        <a
+          href="tel:0654643232"
+          className="hidden md:block text-[11px] text-[#4ADE80] hover:text-white tracking-wide transition-colors"
+        >
+          06-54643232
+        </a>
+      </div>
+    </div>
   );
 }
 
 function SiteHeader({ categories }: { categories: Category[] }) {
   return (
-    <header className="sticky top-0 z-50">
-      <div className="bg-[#1C1C1E]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-4 h-16">
-          <Link href="/" className="flex-shrink-0">
-            <span className="text-base font-semibold text-white tracking-tight block">
-              capsuleautomaat.nl
-            </span>
-            <span className="text-xs text-[#9CA3AF] hidden sm:block leading-none mt-0.5">
-              De goedkoopste capsules van NL
-            </span>
-          </Link>
+    <header className="sticky top-0 z-50 bg-[#080808]/85 backdrop-blur-xl border-b border-white/[0.05]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-5 h-[60px]">
+        <Link href="/" className="flex-shrink-0 flex flex-col">
+          <span className="text-[14px] font-bold text-white tracking-tight leading-tight">
+            capsuleautomaat.nl
+          </span>
+          <span className="text-[9px] text-[#404040] uppercase tracking-[0.18em] leading-none mt-0.5">
+            Groothandel
+          </span>
+        </Link>
 
-          <div className="flex-1 max-w-xl mx-auto hidden sm:flex">
-            <input
-              type="text"
-              placeholder="Zoek producten..."
-              className="flex-1 bg-[#2C2C2E] text-white text-sm px-4 py-2 outline-none rounded-l placeholder-white/40 min-w-0"
-            />
-            <button
-              type="button"
-              className="bg-[#16A34A] hover:bg-[#15803D] text-white px-5 py-2 text-sm font-medium rounded-r transition-colors flex-shrink-0"
-            >
-              Zoeken
-            </button>
-          </div>
-
-          <Link
-            href="#"
-            className="ml-auto sm:ml-0 text-white/70 hover:text-white transition-colors flex-shrink-0"
+        <div className="flex-1 max-w-sm mx-auto hidden md:flex">
+          <input
+            type="text"
+            placeholder="Zoek producten..."
+            className="flex-1 bg-white/[0.04] border border-white/[0.07] text-white text-sm px-3.5 py-2 outline-none rounded-l placeholder-white/20 min-w-0 focus:border-white/[0.15] transition-colors"
+          />
+          <button
+            type="button"
+            className="bg-[#16A34A] hover:bg-[#15803D] text-white px-4 py-2 text-sm font-medium rounded-r transition-colors flex-shrink-0"
           >
-            <ShoppingCart size={20} strokeWidth={1.75} />
-          </Link>
+            Zoek
+          </button>
         </div>
-      </div>
 
-      <nav className="bg-[#2C2C2E] overflow-x-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center h-10">
-          {categories.map((cat) => (
+        <nav className="hidden lg:flex items-center gap-0.5 ml-auto mr-4">
+          {categories.slice(0, 4).map((cat) => (
             <Link
               key={cat.id}
               href={`#cat-${cat.slug}`}
-              className="text-sm text-gray-400 hover:text-white px-3 py-2 whitespace-nowrap transition-colors"
+              className="text-[12px] text-[#6B6B6B] hover:text-white px-2.5 py-1.5 rounded hover:bg-white/[0.04] whitespace-nowrap transition-all"
             >
-              {cat.name}
+              {cat.name.length > 18 ? cat.name.slice(0, 16) + "..." : cat.name}
             </Link>
           ))}
-        </div>
-      </nav>
+        </nav>
+
+        <Link
+          href="#"
+          className="ml-auto lg:ml-0 text-[#6B6B6B] hover:text-white transition-colors flex-shrink-0"
+        >
+          <ShoppingCart size={19} strokeWidth={1.5} />
+        </Link>
+      </div>
     </header>
   );
 }
 
 function HeroBanner() {
   return (
-    <section className="bg-[#1C1C1E] px-4 py-20 sm:py-28">
-      <div className="max-w-7xl mx-auto">
-        <p className="text-xs font-semibold text-[#6B7280] uppercase tracking-widest mb-6">
-          Capsule groothandel
+    <section className="relative bg-[#080808] overflow-hidden">
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
+          backgroundSize: "80px 80px",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none"
+        style={{ background: "linear-gradient(to bottom, transparent, #080808)" }}
+      />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-20 pb-16 sm:pt-28 sm:pb-24">
+        <p className="text-[11px] font-semibold text-[#404040] uppercase tracking-[0.22em] mb-7">
+          B2B capsule groothandel voor Nederland
         </p>
-        <h1 className="text-4xl sm:text-5xl font-bold text-white leading-tight mb-5 max-w-2xl">
-          De goedkoopste capsules
+        <h1 className="text-[50px] sm:text-7xl lg:text-8xl font-black text-white leading-[0.9] tracking-[-0.03em] mb-7 max-w-3xl">
+          De goedkoopste
+          <br />
+          <span className="text-[#16A34A]">capsules</span>
           <br />
           van Nederland.
         </h1>
-        <p className="text-[#9CA3AF] text-base sm:text-lg mb-10 max-w-lg leading-relaxed">
-          Wij zijn de goedkoopste leveranciers van capsules voor automaten in
-          Nederland. Bestel direct uit voorraad, vanaf 100 stuks.
+        <p className="text-[#5A5A5A] text-base sm:text-lg mb-10 max-w-sm leading-relaxed">
+          Capsules, automaten en gevuld speelgoed voor wederverkopers in de
+          Benelux. Direkt uit voorraad, vanaf 100 stuks.
         </p>
-        <Link
-          href="#assortiment"
-          className="inline-block bg-[#16A34A] hover:bg-[#15803D] text-white font-semibold px-7 py-3.5 rounded text-sm transition-colors"
-        >
-          Bekijk ons assortiment
-        </Link>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <Link
+            href="#assortiment"
+            className="inline-flex items-center gap-2 bg-[#16A34A] hover:bg-[#15803D] text-white font-semibold px-6 py-3 rounded-md text-[14px] transition-colors"
+          >
+            Bekijk assortiment
+            <ArrowRight size={14} strokeWidth={2.5} />
+          </Link>
+          <a
+            href="tel:0654643232"
+            className="inline-flex items-center gap-2 text-[#5A5A5A] hover:text-white text-[14px] font-medium transition-colors px-1"
+          >
+            <Phone size={13} strokeWidth={1.75} />
+            06-54643232
+          </a>
+        </div>
+
+        <div className="mt-16 pt-7 border-t border-white/[0.05] grid grid-cols-2 sm:grid-cols-4 gap-6">
+          {[
+            { value: "200+", label: "Capsule varianten" },
+            { value: "100 st", label: "Minimale bestelling" },
+            { value: "1-2 dgn", label: "Levertijd" },
+            { value: "Factuur", label: "Betaaloptie B2B" },
+          ].map((s) => (
+            <div key={s.label}>
+              <p className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                {s.value}
+              </p>
+              <p className="text-[11px] text-[#404040] mt-1 uppercase tracking-[0.1em]">
+                {s.label}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
-function CategoryGrid({ categories }: { categories: Category[] }) {
+const USPS = [
+  { icon: Tag, label: "Groothandel prijzen" },
+  { icon: Truck, label: "Uit voorraad leverbaar" },
+  { icon: Package, label: "Bestellen per doos of pallet" },
+  { icon: Building2, label: "Zakelijke BTW-factuur" },
+] as const;
+
+function USPStrip() {
   return (
-    <section id="assortiment" className="bg-[#F9FAFB] px-4 py-16 sm:py-20">
-      <div className="max-w-7xl mx-auto">
-        <SectionLabel>Winkel per categorie</SectionLabel>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 sm:gap-6">
-          {categories.map((cat) => (
-            <Link
-              key={cat.id}
-              id={`cat-${cat.slug}`}
-              href={`#cat-${cat.slug}`}
-              className="group block"
-            >
-              <div className="relative aspect-square overflow-hidden rounded-lg border border-[#E5E7EB] mb-3 bg-gray-100">
-                {cat.image ? (
-                  <Image
-                    src={cat.image.src}
-                    alt={cat.image.alt || cat.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                    sizes="(max-width: 640px) 50vw, 25vw"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gray-100" />
-                )}
+    <div className="bg-[#0D0D0D] border-y border-white/[0.05]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex flex-col sm:flex-row sm:divide-x sm:divide-white/[0.05]">
+          {USPS.map((usp) => {
+            const Icon = usp.icon;
+            return (
+              <div
+                key={usp.label}
+                className="flex items-center gap-2.5 py-3.5 sm:px-6 first:sm:pl-0 last:sm:pr-0 border-b sm:border-b-0 last:border-b-0 border-white/[0.05]"
+              >
+                <Icon
+                  size={13}
+                  className="text-[#16A34A] flex-shrink-0"
+                  strokeWidth={2}
+                />
+                <span className="text-[12px] text-[#737373]">{usp.label}</span>
               </div>
-              <p className="text-sm font-medium text-[#111827] group-hover:text-[#16A34A] transition-colors">
-                {cat.name}
-              </p>
-              <p className="text-xs text-[#6B7280] mt-0.5">{cat.count} producten</p>
-            </Link>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CategoryCard({ category }: { category: Category }) {
+  return (
+    <Link
+      id={`cat-${category.slug}`}
+      href={`#cat-${category.slug}`}
+      className="group relative block w-full h-full overflow-hidden rounded-xl bg-[#111111] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300"
+    >
+      {category.image ? (
+        <Image
+          src={category.image.src}
+          alt={category.image.alt || category.name}
+          fill
+          className="object-cover opacity-45 group-hover:opacity-60 group-hover:scale-[1.04] transition-all duration-500 ease-out"
+          sizes="(max-width: 640px) 50vw, 33vw"
+        />
+      ) : (
+        <div className="absolute inset-0 bg-[#0A0A0A]" />
+      )}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.25) 55%, transparent 100%)",
+        }}
+      />
+      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
+        <p className="font-semibold text-white leading-tight text-sm sm:text-base">
+          {category.name}
+        </p>
+        <p className="text-[10px] text-white/35 mt-0.5">{category.count} producten</p>
+      </div>
+    </Link>
+  );
+}
+
+function CategoryMosaic({ categories }: { categories: Category[] }) {
+  const sorted = [...categories].sort((a, b) => b.count - a.count).slice(0, 6);
+  const [featured, ...rest] = sorted;
+
+  return (
+    <section id="assortiment" className="bg-[#080808] px-4 sm:px-6 py-16 sm:py-24">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-end justify-between mb-10">
+          <div>
+            <p className="text-[11px] text-[#404040] uppercase tracking-[0.18em] mb-2">
+              Assortiment
+            </p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              Winkel per categorie
+            </h2>
+          </div>
+          <Link
+            href="#"
+            className="hidden sm:flex items-center gap-1 text-[12px] text-[#525252] hover:text-white transition-colors"
+          >
+            Alles <ChevronRight size={13} />
+          </Link>
+        </div>
+
+        {/* Desktop bento mosaic */}
+        <div
+          className="hidden sm:grid grid-cols-3 gap-3"
+          style={{ gridAutoRows: "210px" }}
+        >
+          <div className="col-span-2 row-span-2">
+            <CategoryCard category={featured} />
+          </div>
+          {rest.map((cat) => (
+            <CategoryCard key={cat.id} category={cat} />
+          ))}
+        </div>
+
+        {/* Mobile 2-col */}
+        <div className="grid sm:hidden grid-cols-2 gap-3">
+          {sorted.map((cat) => (
+            <div key={cat.id} className="aspect-square">
+              <CategoryCard category={cat} />
+            </div>
           ))}
         </div>
       </div>
@@ -140,38 +287,38 @@ function CategoryGrid({ categories }: { categories: Category[] }) {
 function ProductCard({ product }: { product: Product }) {
   const mainImage = product.images[0];
   return (
-    <div className="bg-white rounded-lg overflow-hidden border border-[#E5E7EB] flex flex-col group">
-      <div className="relative aspect-square overflow-hidden bg-gray-50">
+    <div className="bg-[#111111] rounded-xl overflow-hidden border border-white/[0.06] flex flex-col group hover:border-white/[0.12] transition-all duration-300 hover:-translate-y-0.5">
+      <div className="relative aspect-square overflow-hidden bg-[#0A0A0A]">
         {mainImage ? (
           <Image
             src={mainImage.src}
             alt={mainImage.alt || product.name}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+            className="object-cover opacity-65 group-hover:opacity-85 group-hover:scale-[1.03] transition-all duration-500 ease-out"
             sizes="(max-width: 640px) 50vw, 25vw"
           />
         ) : (
-          <div className="w-full h-full bg-gray-100" />
+          <div className="w-full h-full bg-[#0A0A0A]" />
         )}
         {product.on_sale && (
-          <span className="absolute top-3 left-3 bg-[#EA580C] text-white text-xs font-semibold px-2.5 py-1 rounded-full leading-none">
+          <span className="absolute top-3 left-3 bg-[#EA580C] text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">
             Aanbieding
           </span>
         )}
       </div>
       <div className="p-4 flex flex-col flex-1">
-        <p className="text-sm text-[#111827] font-medium leading-snug mb-3 flex-1">
+        <p className="text-[13px] text-[#A3A3A3] leading-snug mb-3 flex-1">
           {product.name}
         </p>
         <div className="mb-3">
-          <span className="text-[#16A34A] font-bold text-lg">
+          <span className="text-[#16A34A] font-bold text-xl tracking-tight">
             {formatPrice(product.price)}
           </span>
-          <span className="text-[#6B7280] text-xs ml-1.5">excl. btw</span>
+          <span className="text-[#404040] text-[11px] ml-1.5">excl. btw</span>
         </div>
         <button
           type="button"
-          className="w-full bg-[#16A34A] hover:bg-[#15803D] text-white text-sm font-medium py-2.5 rounded transition-colors"
+          className="w-full bg-[#16A34A]/10 hover:bg-[#16A34A] border border-[#16A34A]/25 hover:border-[#16A34A] text-[#4ADE80] hover:text-white text-[13px] font-medium py-2.5 rounded-lg transition-all duration-200"
         >
           In winkelwagen
         </button>
@@ -182,11 +329,26 @@ function ProductCard({ product }: { product: Product }) {
 
 function FeaturedProducts({ products }: { products: Product[] }) {
   return (
-    <section className="bg-white px-4 py-16 sm:py-20 border-t border-[#E5E7EB]">
+    <section className="bg-[#080808] px-4 sm:px-6 pb-16 sm:pb-24 border-t border-white/[0.04]">
       <div className="max-w-7xl mx-auto">
-        <SectionLabel>Net binnen</SectionLabel>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 sm:gap-6">
-          {products.map((product) => (
+        <div className="flex items-end justify-between mb-10 pt-16 sm:pt-20">
+          <div>
+            <p className="text-[11px] text-[#404040] uppercase tracking-[0.18em] mb-2">
+              Direct beschikbaar
+            </p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              Uitgelichte producten
+            </h2>
+          </div>
+          <Link
+            href="#"
+            className="hidden sm:flex items-center gap-1 text-[12px] text-[#525252] hover:text-white transition-colors"
+          >
+            Alle producten <ChevronRight size={13} />
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+          {products.slice(0, 8).map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
@@ -195,77 +357,60 @@ function FeaturedProducts({ products }: { products: Product[] }) {
   );
 }
 
-const USPS = [
-  {
-    icon: Tag,
-    title: "Groothandel prijzen",
-    description: "Scherpe inkoopprijzen voor wederverkopers",
-  },
-  {
-    icon: Truck,
-    title: "Uit voorraad leverbaar",
-    description: "Direct beschikbaar, snel verzonden",
-  },
-  {
-    icon: Package,
-    title: "Minimaal 100 stuks",
-    description: "Bestellen per doos of pallet",
-  },
-  {
-    icon: Receipt,
-    title: "Zakelijke factuur",
-    description: "Inclusief BTW-specificatie",
-  },
-] as const;
-
-function USPBar() {
+function B2BCTA() {
   return (
-    <section className="bg-[#1C1C1E] px-4">
+    <section className="bg-[#0A0A0A] border-t border-white/[0.05] px-4 sm:px-6 py-16 sm:py-24">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/10">
-          {USPS.map((usp) => {
-            const Icon = usp.icon;
-            return (
-              <div
-                key={usp.title}
-                className="bg-[#1C1C1E] py-8 px-6 flex items-start gap-3"
-              >
-                <Icon
-                  size={18}
-                  className="text-[#16A34A] mt-0.5 flex-shrink-0"
-                  strokeWidth={1.75}
-                />
-                <div>
-                  <p className="text-sm font-semibold text-white">
-                    {usp.title}
-                  </p>
-                  <p className="text-xs text-[#6B7280] mt-0.5">
-                    {usp.description}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
+        <div className="bg-[#111111] border border-white/[0.06] rounded-2xl px-8 py-12 sm:px-12 sm:py-16 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8">
+          <div className="max-w-xl">
+            <p className="text-[11px] text-[#16A34A] uppercase tracking-[0.18em] mb-3 font-semibold">
+              Zakelijk bestellen
+            </p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">
+              Winkelier of ondernemer?
+            </h2>
+            <p className="text-[#5A5A5A] text-[15px] leading-relaxed">
+              Vraag een zakelijk account aan voor exclusieve
+              groothandelsprijzen, bestellen op factuur en persoonlijk advies
+              van ons team.
+            </p>
+          </div>
+          <div className="flex flex-col sm:items-end gap-3 flex-shrink-0">
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 bg-[#16A34A] hover:bg-[#15803D] text-white font-semibold px-6 py-3 rounded-md text-[14px] transition-colors whitespace-nowrap"
+            >
+              Offerte aanvragen
+              <ArrowRight size={14} strokeWidth={2.5} />
+            </Link>
+            <a
+              href="tel:0654643232"
+              className="inline-flex items-center gap-2 text-[#525252] hover:text-white text-[13px] transition-colors"
+            >
+              <Phone size={13} strokeWidth={1.75} />
+              Of bel 06-54643232
+            </a>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function SiteFooter() {
+function SiteFooter({ categories }: { categories: Category[] }) {
   return (
-    <footer className="bg-[#1C1C1E] border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
-          <div>
-            <span className="text-base font-semibold text-white block">
+    <footer className="bg-[#080808] border-t border-white/[0.05]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-14 pb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-12">
+          <div className="col-span-2 sm:col-span-1">
+            <span className="text-[15px] font-bold text-white block mb-1">
               capsuleautomaat.nl
             </span>
-            <p className="text-sm text-gray-400 mt-1">
+            <p className="text-[12px] text-[#404040] mb-4">
               Onderdeel van{" "}
               <a
                 href="https://priceking.nl"
-                className="text-white hover:text-[#16A34A] transition-colors"
+                className="text-[#525252] hover:text-white transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -274,33 +419,86 @@ function SiteFooter() {
             </p>
             <a
               href="tel:0654643232"
-              className="text-sm text-gray-400 hover:text-white transition-colors mt-1 block"
+              className="flex items-center gap-2 text-[13px] text-[#525252] hover:text-white transition-colors"
             >
+              <Phone size={13} strokeWidth={1.75} />
               06-54643232
             </a>
           </div>
-          <nav className="flex flex-wrap gap-6">
-            <Link
-              href="#"
-              className="text-sm text-gray-400 hover:text-white transition-colors"
-            >
-              Webshop
-            </Link>
-            <Link
-              href="/contact"
-              className="text-sm text-gray-400 hover:text-white transition-colors"
-            >
-              Contact
-            </Link>
-            <Link
-              href="#"
-              className="text-sm text-gray-400 hover:text-white transition-colors"
-            >
-              Algemene voorwaarden
-            </Link>
-          </nav>
+
+          <div>
+            <p className="text-[11px] text-[#303030] uppercase tracking-[0.15em] mb-4 font-semibold">
+              Categorieën
+            </p>
+            <ul className="space-y-2.5">
+              {categories.slice(0, 5).map((cat) => (
+                <li key={cat.id}>
+                  <Link
+                    href={`#cat-${cat.slug}`}
+                    className="text-[13px] text-[#525252] hover:text-white transition-colors"
+                  >
+                    {cat.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="text-[11px] text-[#303030] uppercase tracking-[0.15em] mb-4 font-semibold">
+              Informatie
+            </p>
+            <ul className="space-y-2.5">
+              {[
+                { label: "Over ons", href: "#" },
+                { label: "Contact", href: "/contact" },
+                { label: "Algemene voorwaarden", href: "#" },
+                { label: "Privacybeleid", href: "#" },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    className="text-[13px] text-[#525252] hover:text-white transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="text-[11px] text-[#303030] uppercase tracking-[0.15em] mb-4 font-semibold">
+              Zakelijk
+            </p>
+            <ul className="space-y-2.5">
+              {[
+                { label: "Offerte aanvragen", href: "/contact" },
+                { label: "Groothandel info", href: "#" },
+                { label: "Retourneren", href: "#" },
+                { label: "Bezorging", href: "#" },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    className="text-[13px] text-[#525252] hover:text-white transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-        <p className="text-xs text-[#6B7280] mt-8">© 2025 capsuleautomaat.nl</p>
+
+        <div className="pt-6 border-t border-white/[0.04] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <p className="text-[11px] text-[#2A2A2A]">
+            © 2025 capsuleautomaat.nl
+          </p>
+          <p className="text-[11px] text-[#2A2A2A]">
+            Onderdeel van Team Priceking.nl
+          </p>
+        </div>
       </div>
     </footer>
   );
@@ -313,15 +511,17 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="min-h-screen flex flex-col font-sans">
+    <div className="min-h-screen flex flex-col font-sans bg-[#080808]">
+      <AnnouncementBar />
       <SiteHeader categories={categories} />
       <main className="flex-1">
         <HeroBanner />
-        <CategoryGrid categories={categories} />
+        <USPStrip />
+        <CategoryMosaic categories={categories} />
         <FeaturedProducts products={products} />
-        <USPBar />
+        <B2BCTA />
       </main>
-      <SiteFooter />
+      <SiteFooter categories={categories} />
     </div>
   );
 }
