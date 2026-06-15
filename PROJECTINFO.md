@@ -7,7 +7,7 @@ TypeScript en Tailwind CSS.
 ## Stack
 - Frontend: Next.js 16 (App Router), TypeScript, Tailwind CSS
 - Backend: WordPress + WooCommerce (bestaande installatie op capsuleautomaat.nl)
-- Deployment: Vercel
+- Deployment: Hetzner VPS via PM2 + GitHub Actions (zie CLAUDE.md)
 - Font: Inter
 
 ## Design
@@ -44,4 +44,5 @@ Keys aanmaken via: WooCommerce > Instellingen > Geavanceerd > REST API
 npm run dev → http://localhost:3000
 
 ## Deployment
-Vercel, gekoppeld aan GitHub repository capsuleautomaat
+Hetzner VPS, PM2 (poort 3005), live op https://funnelvisionstrategies.com/richard.
+Push naar main triggert auto-deploy via GitHub Actions. Details in CLAUDE.md.
