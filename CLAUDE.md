@@ -6,6 +6,8 @@ GitHub: `github.com/serdartufan/capsuleautomaat` (branch `main`)
 
 B2B groothandel-webshop voor capsuleautomaat.nl (onderdeel Team Priceking.nl). Zie `PROJECTINFO.md` voor design, content en openstaande features.
 
+Draait op **echte WooCommerce-data** (geen mockdata meer). Data-laag: `src/lib/woocommerce.ts` (v3 REST, HTTP Basic Auth, ISR `revalidate 300s`) — functies `getProducts`, `getTopLevelCategories`/`getCategories`, `getProduct`, `getProductBySlug`. Routes: `/` (homepage) en `/product/[slug]` (detailpagina, met loading/not-found/error states).
+
 ---
 
 ## Stack
@@ -44,6 +46,6 @@ B2B groothandel-webshop voor capsuleautomaat.nl (onderdeel Team Priceking.nl). Z
 
 ## Secrets
 
-`.env.local` voor WooCommerce-credentials (`WOOCOMMERCE_URL/KEY/SECRET`). Nooit committen.
+`.env.local` (gitignored) met `WOOCOMMERCE_URL` + `WOOCOMMERCE_CONSUMER_KEY` + `WOOCOMMERCE_CONSUMER_SECRET`. Bron: `/home/serdar/.secrets/api-keys.env` (grep `WOOCOMMERCE` ernaartoe). De client accepteert ook de korte namen `WOOCOMMERCE_KEY/SECRET`. **Let op**: `.env.local` gaat niet mee via git/GitHub Actions — de VPS heeft een eigen kopie nodig.
 
 @AGENTS.md
