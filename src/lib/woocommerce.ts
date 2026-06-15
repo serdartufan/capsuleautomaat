@@ -137,3 +137,79 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   });
   return products[0] ?? null;
 }
+
+// ── Orders (POST, server-side) ──────────────────────────────────────────────
+
+export interface OrderAddress {
+  first_name: string;
+  last_name: string;
+  company?: string;
+  address_1: string;
+  postcode: string;
+  city: string;
+  country: string;
+  email?: string;
+  phone?: string;
+}
+
+export interface CreateOrderInput {
+  payment_method: string;
+  payment_method_title: string;
+  set_paid: boolean;
+  billing: OrderAddress;
+  shipping: OrderAddress;
+  line_items: { product_id: number; quantity: number }[];
+  shipping_lines: {
+    method_id: string;
+    method_title: string;
+    total: string;
+  }[];
+  customer_note?: string;
+}
+
+export interface WooOrder {
+  id: number;
+  number: string;
+  status: string;
+  total: string;
+  currency: string;
+}
+
+/** Maak een order aan via POST (geen caching). */
+export async function createOrder(input: CreateOrderInput): Promise<WooOrder> {
+  const { baseUrl, auth } = getConfig();
+
+  let res: Response;
+  try {
+    res = await fetch(`${baseUrl}/orders`, {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${auth}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(input),
+      cache: "no-store",
+    });
+  } catch (cause) {
+    throw new WooCommerceError(
+      `Kon WooCommerce niet bereiken: ${(cause as Error).message}`,
+    );
+  }
+
+  if (!res.ok) {
+    let detail = "";
+    try {
+      const body = (await res.json()) as { message?: string };
+      if (body?.message) detail = ` — ${body.message}`;
+    } catch {
+      // geen JSON-body
+    }
+    throw new WooCommerceError(
+      `WooCommerce order-fout ${res.status} ${res.statusText}${detail}`,
+      res.status,
+    );
+  }
+
+  return res.json() as Promise<WooOrder>;
+}

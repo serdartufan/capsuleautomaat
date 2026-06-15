@@ -2,8 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArrowLeft, Check, Phone, ShoppingCart, X } from "lucide-react";
+import { ArrowLeft, Check, Phone, X } from "lucide-react";
 import { getProductBySlug } from "@/lib/woocommerce";
+import AddToCartButton from "@/components/AddToCartButton";
+import CartButton from "@/components/CartButton";
 
 function formatPrice(price: string): string {
   const num = parseFloat(price);
@@ -58,13 +60,16 @@ export default async function ProductPage({
   return (
     <div className="min-h-screen bg-[#080808] text-[#F5F5F5]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-[13px] text-[#525252] hover:text-white transition-colors mb-8"
-        >
-          <ArrowLeft size={14} strokeWidth={2} />
-          Terug naar overzicht
-        </Link>
+        <div className="flex items-center justify-between mb-8">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-[13px] text-[#525252] hover:text-white transition-colors"
+          >
+            <ArrowLeft size={14} strokeWidth={2} />
+            Terug naar overzicht
+          </Link>
+          <CartButton />
+        </div>
 
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
           {/* Afbeelding */}
@@ -138,14 +143,17 @@ export default async function ProductPage({
             )}
 
             <div className="flex flex-col sm:flex-row gap-3 mb-8">
-              <button
-                type="button"
+              <AddToCartButton
+                variant="detail"
                 disabled={!product.purchasable || !inStock}
-                className="inline-flex items-center justify-center gap-2 bg-[#16A34A] hover:bg-[#15803D] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-6 py-3.5 rounded-md text-[14px] transition-colors"
-              >
-                <ShoppingCart size={15} strokeWidth={2} />
-                In winkelwagen
-              </button>
+                item={{
+                  productId: product.id,
+                  name: product.name,
+                  slug: product.slug,
+                  price: product.price,
+                  image: mainImage?.src ?? null,
+                }}
+              />
               <a
                 href="tel:0654643232"
                 className="inline-flex items-center justify-center gap-2 border border-white/[0.1] hover:border-white/[0.2] text-[#A3A3A3] hover:text-white px-6 py-3.5 rounded-md text-[14px] font-medium transition-colors"

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import CartDrawer from "@/components/CartDrawer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,6 +23,7 @@ export default function RootLayout({
     <html lang="nl" className={`${inter.variable} h-full`}>
       <body className="min-h-full flex flex-col bg-[#080808] text-[#F5F5F5]">
         {children}
+        <CartDrawer />
       </body>
     </html>
   );

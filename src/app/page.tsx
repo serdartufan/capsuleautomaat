@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ShoppingCart,
   Truck,
   Package,
   Tag,
@@ -12,6 +11,8 @@ import {
 } from "lucide-react";
 import { getTopLevelCategories, getProducts } from "@/lib/woocommerce";
 import type { Category, Product } from "@/types/woocommerce";
+import CartButton from "@/components/CartButton";
+import AddToCartButton from "@/components/AddToCartButton";
 
 function formatPrice(price: string): string {
   const num = parseFloat(price);
@@ -81,12 +82,7 @@ function SiteHeader({ categories }: { categories: Category[] }) {
           ))}
         </nav>
 
-        <Link
-          href="#"
-          className="ml-auto lg:ml-0 text-[#6B6B6B] hover:text-white transition-colors flex-shrink-0"
-        >
-          <ShoppingCart size={19} strokeWidth={1.5} />
-        </Link>
+        <CartButton className="ml-auto lg:ml-0 flex-shrink-0" />
       </div>
     </header>
   );
@@ -286,6 +282,7 @@ function CategoryMosaic({ categories }: { categories: Category[] }) {
 
 function ProductCard({ product }: { product: Product }) {
   const mainImage = product.images[0];
+  const inStock = product.stock_status === "instock";
   return (
     <div className="bg-[#111111] rounded-xl overflow-hidden border border-white/[0.06] flex flex-col group hover:border-white/[0.12] transition-all duration-300 hover:-translate-y-0.5">
       <Link
@@ -322,12 +319,17 @@ function ProductCard({ product }: { product: Product }) {
           </span>
           <span className="text-[#404040] text-[11px] ml-1.5">excl. btw</span>
         </div>
-        <button
-          type="button"
-          className="w-full bg-[#16A34A]/10 hover:bg-[#16A34A] border border-[#16A34A]/25 hover:border-[#16A34A] text-[#4ADE80] hover:text-white text-[13px] font-medium py-2.5 rounded-lg transition-all duration-200"
-        >
-          In winkelwagen
-        </button>
+        <AddToCartButton
+          variant="card"
+          disabled={!inStock}
+          item={{
+            productId: product.id,
+            name: product.name,
+            slug: product.slug,
+            price: product.price,
+            image: mainImage?.src ?? null,
+          }}
+        />
       </div>
     </div>
   );
