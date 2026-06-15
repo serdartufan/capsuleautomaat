@@ -6,7 +6,13 @@ GitHub: `github.com/serdartufan/capsuleautomaat` (branch `main`)
 
 B2B groothandel-webshop voor capsuleautomaat.nl (onderdeel Team Priceking.nl). Zie `PROJECTINFO.md` voor design, content en openstaande features.
 
-Draait op **echte WooCommerce-data** (geen mockdata meer). Data-laag: `src/lib/woocommerce.ts` (v3 REST, HTTP Basic Auth, ISR `revalidate 300s`) — functies `getProducts`, `getTopLevelCategories`/`getCategories`, `getProduct`, `getProductBySlug`. Routes: `/` (homepage) en `/product/[slug]` (detailpagina, met loading/not-found/error states).
+Draait op **echte WooCommerce-data** (geen mockdata). Data-laag: `src/lib/woocommerce.ts` (v3 REST, HTTP Basic Auth, ISR `revalidate 300s`) — `getProducts`, `getTopLevelCategories`/`getCategories`, `getProduct`, `getProductBySlug`, `createOrder` (POST, `no-store`).
+
+**Cart & checkout**: Zustand-store met localStorage-persist (`src/store/cart.ts`); componenten `AddToCartButton`/`CartButton`/`CartDrawer` (sidebar, globaal in `layout.tsx`). Checkout `/checkout` (NL B2B-velden, apart factuuradres optioneel, verzending vast tarief €7,95 / afhalen €0,00 in `src/lib/checkout-options.ts`, betaalmethode hardcoded `cheque`). Order via **`POST /api/orders`** (server-side, tarief server-bepaald) → redirect naar `/checkout/bevestiging?order=<nr>`.
+
+Routes: `/`, `/product/[slug]`, `/checkout`, `/checkout/bevestiging`, `/api/orders`. Verkoopeenheid = **1 product = 100 stuks**; `price` is per 100 (label "per 100 st."), niet per stuk.
+
+basePath als `NEXT_PUBLIC_BASE_PATH` geëxposeerd (`src/lib/config.ts` → `apiPath()`) want client-`fetch` past basePath niet automatisch toe.
 
 ---
 
