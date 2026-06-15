@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "capsuleautomaat.nl",
+      },
+      {
+        protocol: "https",
         hostname: "picsum.photos",
       },
       {

@@ -10,7 +10,7 @@ import {
   ChevronRight,
   Building2,
 } from "lucide-react";
-import { getCategories, getProducts } from "@/lib/woocommerce";
+import { getTopLevelCategories, getProducts } from "@/lib/woocommerce";
 import type { Category, Product } from "@/types/woocommerce";
 
 function formatPrice(price: string): string {
@@ -288,7 +288,10 @@ function ProductCard({ product }: { product: Product }) {
   const mainImage = product.images[0];
   return (
     <div className="bg-[#111111] rounded-xl overflow-hidden border border-white/[0.06] flex flex-col group hover:border-white/[0.12] transition-all duration-300 hover:-translate-y-0.5">
-      <div className="relative aspect-square overflow-hidden bg-[#0A0A0A]">
+      <Link
+        href={`/product/${product.slug}`}
+        className="relative aspect-square overflow-hidden bg-[#0A0A0A] block"
+      >
         {mainImage ? (
           <Image
             src={mainImage.src}
@@ -305,11 +308,14 @@ function ProductCard({ product }: { product: Product }) {
             Aanbieding
           </span>
         )}
-      </div>
+      </Link>
       <div className="p-4 flex flex-col flex-1">
-        <p className="text-[13px] text-[#A3A3A3] leading-snug mb-3 flex-1">
+        <Link
+          href={`/product/${product.slug}`}
+          className="text-[13px] text-[#A3A3A3] hover:text-white leading-snug mb-3 flex-1 transition-colors"
+        >
           {product.name}
-        </p>
+        </Link>
         <div className="mb-3">
           <span className="text-[#16A34A] font-bold text-xl tracking-tight">
             {formatPrice(product.price)}
@@ -506,7 +512,7 @@ function SiteFooter({ categories }: { categories: Category[] }) {
 
 export default async function HomePage() {
   const [categories, products] = await Promise.all([
-    getCategories(),
+    getTopLevelCategories(),
     getProducts(),
   ]);
 
